@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\UserARF;
-use App\Models\PostARF;
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PostARF>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
 class PostFactory extends Factory
 {
@@ -16,7 +16,7 @@ class PostFactory extends Factory
      *
      * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
-    protected $model = PostARF::class;
+    protected $model = Post::class;
     /**
      * Define the model's default state.
      *
@@ -27,21 +27,9 @@ class PostFactory extends Factory
         $isPublished = fake()->boolean(70); // 70% publicadas
 
         return [
-            'user_id' => UserARF::factory(),
+            'user_id' => User::factory(),
             'title' => fake()->sentence(6, true),
             'content' => fake()->paragraphs(5, true),
-            'excerpt' => fake()->text(150),
-            'views' => fake()->numberBetween(0, 10000),
-            'category' => fake()->randomElement([
-                'Tecnología',
-                'Ciencia',
-                'Deportes',
-                'Entretenimiento',
-                'Negocios',
-                'Salud',
-                'Educación',
-                'Política'
-            ]),
             'published_at' => $isPublished ? fake()->dateTimeBetween('-1 year', 'now') : null,
             'is_published' => $isPublished,
         ];

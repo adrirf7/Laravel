@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\UserARF;
-use App\Models\PostARF;
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,27 +16,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear 5 usuarios con sus publicaciones
-        UserARF::factory(5)
-            ->has(PostARF::factory()->count(3), 'posts')
-            ->create();
+        // Crear 10 usuarios con publicaciones variadas
+        User::factory(10)->create()->each(function ($user) {
+            // Cada usuario tendrá entre 2 y 5 publicaciones
+            Post::factory(rand(2, 5))->create([
+                'user_id' => $user->id,
+            ]);
+        });
 
-        // Opcional: Crear un usuario de prueba específico
-        $testUser = UserARF::factory()->create([
-            'name' => 'Admin User',
-            'username' => 'admin',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-            'active' => true,
+        // Crear un usuario de prueba específico
+        $testUser = User::factory()->create([
+            'name' => 'Adrian Test',
+            'email' => 'adrian@test.com',
         ]);
 
-        // Crear 3 publicaciones para el usuario de prueba
-        PostARF::factory()->count(3)->create([
+        // Crear 5 publicaciones para el usuario de prueba
+        Post::factory()->count(5)->create([
             'user_id' => $testUser->id,
         ]);
 
         $this->command->info('¡Base de datos poblada exitosamente!');
-        $this->command->info('Total usuarios: ' . UserARF::count());
-        $this->command->info('Total publicaciones: ' . PostARF::count());
+        $this->command->info('Total usuarios: ' . User::count());
+        $this->command->info('Total publicaciones: ' . Post::count());
     }
 }
